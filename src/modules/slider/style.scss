@@ -1,0 +1,13 @@
+$font-size: 1rem;
+$font-color: rgb(199, 133, 133);
+
+html {
+  font-size: $font-size;
+  color: $font-color;
+}
+
+#test{
+  width: 200px;
+  height: 200px;
+  background-image: url('/assets/img2.png');
+}
