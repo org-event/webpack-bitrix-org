@@ -6,15 +6,8 @@ const HtmlWebpackSimpleIncludePlugin = require('html-webpack-simple-include-plug
 const fse = require('fs-extra');
 const webpack = require('webpack');
 
-const pages = [
-	"index.html",
-	"about.html",
-];
-
-const modules = [
-	"news",
-	"slider"
-];
+const modules = require('./src/config-modules');
+const pages = require('./src/config-pages');
 
 module.exports = {
 	entry: modules.reduce((config, module) => {

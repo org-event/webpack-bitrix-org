@@ -6,15 +6,7 @@ const HtmlWebpackSimpleIncludePlugin = require('html-webpack-simple-include-plug
 const fse = require('fs-extra');
 const webpack = require('webpack');
 
-const pages = [
-	"index.html",
-	"about.html",
-];
-
-const modules = [
-	"news",
-	"slider"
-];
+const modules = require('./src/config-modules');
 
 module.exports = {
 	entry: modules.reduce((config, module) => {
@@ -94,9 +86,9 @@ module.exports = {
 		modules.map(
 		    (module) =>
 				new HtmlWebpackPlugin({
-					inject: true,
+					inject: false,
 					template: `src/modules/${module}/template.html`,
-					filename: `${module}/template.html`,
+					filename: `${module}/template.php`,
 					chunks: [module],
 				})
 
