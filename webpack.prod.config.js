@@ -16,16 +16,15 @@ const modules = [
 	"slider"
 ];
 
-
 module.exports = {
-	entry: modules.reduce((config, modul) => {
-		config[modul] = `./src/modules/${modul}/script.js`;
+	entry: modules.reduce((config, module) => {
+		config[module] = `./src/modules/${module}/script.js`;
 	    return config;
 	}, {}),
 
 	output: {
 		path: path.join(__dirname, 'dist'),
-		filename: 'js/[name].js',
+		filename: '[name]/script.js',
 		assetModuleFilename: '../assets/[name][ext]',
 		clean: true,
 	},
@@ -82,7 +81,7 @@ module.exports = {
 	},
 
 	plugins: [
-		new MiniCssExtractPlugin({ filename: 'css/[name].css', }),
+		new MiniCssExtractPlugin({ filename: '[name]/style.css', }),
 		new webpack.HotModuleReplacementPlugin(),
 		new LodashModuleReplacementPlugin({
 			'collections': true,
@@ -90,57 +89,17 @@ module.exports = {
 			'arrays': true,
 			'objects': true,
 		}),
-
-		// new HtmlWebpackPlugin({
-		// 	inject: true,
-		// 	template: `src/pages/index.html`,
-		// 	filename: `index.html`,
-		// 	chunks: [].concat(modules.map((modul) => modul)),
-		
-		// }),
-		// new HtmlWebpackPlugin({
-		// 	inject: true,
-		// 	template: `src/pages/about.html`,
-		// 	filename: `about.html`,
-		// 	chunks: [].concat(modules.map((modul) => modul)),
-		
-		// }),
-      
 	]
 	.concat(
-		pages.map(
-		    (page) => 
-			new HtmlWebpackPlugin({
-				inject: true,
-				template: `src/pages/${page}`,
-				filename: `${page}`,
-				chunks: [].concat(modules.map((modul) => modul)),
-			}),
-		)
-  	)
-	.concat(
 		modules.map(
-		    (modul) => 
+		    (module) =>
 				new HtmlWebpackPlugin({
 					inject: true,
-					template: `src/modules/${modul}/template.html`,
-					filename: `/modules/${modul}/template.html`,
-					chunks: [modul],
+					template: `src/modules/${module}/template.html`,
+					filename: `${module}/template.html`,
+					chunks: [module],
 				})
 
 		)
   	)
-	.concat(
-		modules.map(
-			(modul) => 
-				new HtmlWebpackSimpleIncludePlugin([
-					//Replace html contents with string or regex patterns
-					{
-						// this example shows replacing with file contents
-						tag: `<include-${modul} />`,
-						content: fse.readFileSync(path.resolve(__dirname, `./src/modules/${modul}/template.html`)),
-					}
-				])
-		)
- 	)
 };

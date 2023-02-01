@@ -17,9 +17,9 @@ const modules = [
 ];
 
 module.exports = {
-	entry: modules.reduce((config, modul) => {
-		config[modul] = `./src/modules/${modul}/script.js`;
-	    return config;
+	entry: modules.reduce((config, module) => {
+		config[module] = `./src/modules/${module}/script.js`;
+		return config;
 	}, {}),
 
 	output: {
@@ -31,46 +31,46 @@ module.exports = {
 
 	devServer: {
 		static: {
-		  directory: path.join(__dirname, '/'),
+			directory: path.join(__dirname, '/'),
 		},
 		compress: true,
 		port: 8080,
 	},
-	
+
 	module: {
 		rules: [
 			{
 				test: /\.(sass|scss|css)$/,
 				use: [
-						{
-							loader: MiniCssExtractPlugin.loader,							
-						},
-						'css-loader',
-						'postcss-loader',
-						'sass-loader',
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					'css-loader',
+					'postcss-loader',
+					'sass-loader',
 				],
 			},
 
 			{
-                test: /\.js$/,
-                loader: "babel-loader",
-                exclude: /node_modules/,
-            },
+				test: /\.js$/,
+				loader: "babel-loader",
+				exclude: /node_modules/,
+			},
 
 			{
 				test: /\.html$/,
 				loader: 'html-loader',
 			},
-			
+
 			{
 				test: /\.(svg|png|jpe?g|gif)$/,
 				type: 'asset/resource',
 			},
 
 			{
-                test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
-                type: 'asset/inline',
-            },
+				test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+				type: 'asset/inline',
+			},
 		],
 	},
 
@@ -89,42 +89,41 @@ module.exports = {
 			'arrays': true,
 			'objects': true,
 		}),
-      
 	]
 	.concat(
 		pages.map(
-		    (page) => 
-			new HtmlWebpackPlugin({
-				inject: true,
-				template: `src/pages/${page}`,
-				filename: `${page}`,
-				chunks: [].concat(modules.map((modul) => modul)),
-			}),
-		)
-  	)
-	.concat(
-		modules.map(
-		    (modul) => 
+			(page) =>
 				new HtmlWebpackPlugin({
 					inject: true,
-					template: `src/modules/${modul}/template.html`,
-					filename: `/modules/${modul}/template.html`,
-					chunks: [modul],
+					template: `src/pages/${page}`,
+					filename: `${page}`,
+					chunks: [].concat(modules.map((module) => module)),
+				}),
+		)
+	)
+	.concat(
+		modules.map(
+			(module) =>
+				new HtmlWebpackPlugin({
+					inject: true,
+					template: `src/modules/${module}/template.html`,
+					filename: `/modules/${module}/template.html`,
+					chunks: [module],
 				})
 
 		)
-  	)
+	)
 	.concat(
 		modules.map(
-			(modul) => 
+			(module) =>
 				new HtmlWebpackSimpleIncludePlugin([
 					//Replace html contents with string or regex patterns
 					{
 						// this example shows replacing with file contents
-						tag: `<include-${modul} />`,
-						content: fse.readFileSync(path.resolve(__dirname, `./src/modules/${modul}/template.html`)),
+						tag: `<include-${module} />`,
+						content: fse.readFileSync(path.resolve(__dirname, `src/modules/${module}/template.html`)),
 					}
 				])
 		)
- 	)
+	)
 };
