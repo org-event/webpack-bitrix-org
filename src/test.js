@@ -1,4 +1,7 @@
-const path = require("path");
+const path = require('path');
+//console.log(path.join(__dirname, 'modules'));
+
+
 const fs = require('fs');
 const getFiles = function (dir, files){
 
@@ -15,4 +18,4 @@ const getFiles = function (dir, files){
 	return files;
 };
 
-module.exports = getFiles(path.join(__dirname, 'modules'))
+console.log();
